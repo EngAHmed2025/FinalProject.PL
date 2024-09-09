@@ -9,12 +9,16 @@ using System.Threading.Tasks;
 
 namespace FinalProject.DAL.Data
 {
-    internal class AppDbContext:DbContext
+    public class AppDbContext:DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public AppDbContext(DbContextOptions<AppDbContext>options):base(options)
         {
-            optionsBuilder.UseSqlServer("Server = .; Database = FinalProject;Trusted_Connection=True; MultipleActiveResultSets=True");
+
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server = .; Database = FinalProject;Trusted_Connection=True; MultipleActiveResultSets=True");
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration<Department>(new DepartmentConfigurations());
