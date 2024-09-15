@@ -15,7 +15,7 @@ namespace FinalProject.BLL.Repositories
         private readonly AppDbContext _dbContext;
         public DepartmentRepository(AppDbContext dbContext) 
         {
-            dbContext = _dbContext;
+            _dbContext = dbContext;
         }
         public int Add(Department department)
         {
