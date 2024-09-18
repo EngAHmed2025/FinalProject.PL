@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace FinalProject.DAL.Models
 {
-    public class Department
+    public class Department : ModelBase
     {
-        public int Id { get; set; }//PK Identity (1,1)
+        
         [Required(ErrorMessage = "Code is Required!")]
         public string Code { get; set; }
         [Required(ErrorMessage = "Name is Required!")]

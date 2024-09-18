@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace FinalProject.BLL.Interfacies
 {
-    public interface IEmployeeRepository : IGenericRepositroy<Employee>
+    public interface IGenericRepositroy<T> where T : ModelBase
     {
-        IQueryable<Employee>GetEmployeeByAddress(string address);
+        IEnumerable<T> GetAll();
+        T GetById(int id);
+        int Add(T item);
+
+        int Update(T item);
+        int Delete(T item);
+
     }
 }

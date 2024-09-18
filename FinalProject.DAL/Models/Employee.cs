@@ -23,10 +23,9 @@ namespace FinalProject.DAL.Models
         [EnumMember(Value = "PartTime")]
         PartTime = 2
     }
-    public class Employee
+    public class Employee :ModelBase
     {
     
-        public int Id { get; set; }
         [Required(ErrorMessage ="Name Is Required!")]
         [MaxLength(50,ErrorMessage ="Max Length For Name is 50")]
         [MinLength(4,ErrorMessage ="Min Length For Name is 4")]
@@ -34,7 +33,7 @@ namespace FinalProject.DAL.Models
         public string Name { get; set; }
         [Range(21,60)]
         public int? Age { get; set; }
-        [RegularExpression(@"^[0-9]{1,3}-[a-zA-Z]-{5-10}-[a-zA-Z]{4,10}-[a-zA-Z]{5,10}$",ErrorMessage ="Address Must be like 123-treet-ity-ountry")
+        [RegularExpression(@"^[0-9]{1,3}-[a-zA-Z]{5,10}-[a-zA-Z]{4,10}-[a-zA-Z]{5,10}$", ErrorMessage ="Address Must be like 123-street-city-country")
          ]
         public string  Address { get; set; }
         [DataType(DataType.Currency)]
@@ -43,7 +42,7 @@ namespace FinalProject.DAL.Models
         public bool ISActive { get; set; }
         [EmailAddress]
         public string Email { get; set; }
-        [Phone]
+        [RegularExpression(@"^\+?\d{0,13}$", ErrorMessage = "Not a valid phone number.")]
         [Display(Name = "Phone Number")]
         public int PhoneNumber { get; set; }
         [Display(Name = "Hire Date")]
