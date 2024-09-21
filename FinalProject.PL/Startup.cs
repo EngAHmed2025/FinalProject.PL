@@ -1,6 +1,7 @@
 using FinalProject.BLL.Interfacies;
 using FinalProject.BLL.Repositories;
 using FinalProject.DAL.Data;
+using FinalProject.PL.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,6 +39,7 @@ namespace FinalProject.PL
 
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IEmployeeRepository , EmployeeRepository>();
+            services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

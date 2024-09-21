@@ -20,6 +20,9 @@ namespace FinalProject.DAL.Data.Configurations
                 (Gender)=> Gender.ToString(),
                 (genderAsString)=> (Gender)Enum.Parse(typeof(Gender), genderAsString,true)
                     );
+            builder.Property(E => E.Name)
+                .IsRequired(true)
+                .HasMaxLength(50);
         }
     }
 }

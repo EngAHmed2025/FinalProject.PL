@@ -1,8 +1,17 @@
 ﻿@using FinalProject.DAL.Models
 
-@model IEnumerable<Employee>;
+@model IEnumerable<EmployeeViewModel>;
 
-
+<div class="row justify-contnet-center align-items-center mt-5" >
+    <form class="row col-8 offset-2"asp-action="Index">
+        <div class="col-8">
+            <input type="text" class="form-control" name="searchInp" placeholder="Search By Name" />
+        </div>
+        <div>
+            <input type="submit" value="Search" class="btn btn-success" />
+        </div>
+    </form>
+</div>
 <h1>All Employees</h1>
 
 <br/>
@@ -19,6 +28,7 @@
                 <th>@Html.DisplayNameFor(E => E.Name)</th>
                 <th>@Html.DisplayNameFor(E => E.Age)</th>
                 <th>@Html.DisplayNameFor(E => E.Address)</th>
+                <tH>@Html.DisplayNameFor(E => E.Department)</tH>
                 <th>@Html.DisplayNameFor(E => E.Salary)</th>
                 <th>@Html.DisplayNameFor(E => E.ISActive)</th>
                 <th>@Html.DisplayNameFor(E => E.Gender)</th>
@@ -33,9 +43,10 @@
                @foreach(var Employee in Model)
                 {
                     <tr>
-                   <td>@Employee.Name</td>
-                   <td>@Employee.Age</td>
+                    <td>@Employee.Name</td>
+                    <td>@Employee.Age</td>
                     <td>@Employee.Address</td>
+                    <td>@Employee.Department?.Name</td>
                     <td>@Html.DisplayFor(M => Employee.Salary)</td>
                     <td>@Html.DisplayFor(M => Employee.ISActive)</td>
                     <td>@Employee.Gender</td>

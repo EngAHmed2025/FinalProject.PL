@@ -1,9 +1,13 @@
-﻿using FinalProject.BLL.Interfacies;
+﻿using AutoMapper;
+using FinalProject.BLL.Interfacies;
 using FinalProject.DAL.Models;
+using FinalProject.PL.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace FinalProject.PL.Controllers
 {
@@ -11,35 +15,65 @@ namespace FinalProject.PL.Controllers
     {
         private readonly IEmployeeRepository _EmployeeRepository;
         private readonly IWebHostEnvironment _env;
+        private readonly IMapper _mapper;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public EmployeeController(IEmployeeRepository repository, IWebHostEnvironment env)
+        public EmployeeController(IEmployeeRepository repository, IWebHostEnvironment env /*,IDepartmentRepository departmentRepository*/,IMapper mapper)
         {
             _EmployeeRepository = repository;
             _env = env;
+            _mapper = mapper;
+            // _departmentRepository = departmentRepository;
 
             //_EmployeeRepository = new EmployeeRepository(new AppDbContext(new AppDbContextOption())
             // _EmployeeRepository = repository;
         }
 
 
-        [HttpGet]
-        public IActionResult Index()
+        //[HttpGet]
+        public IActionResult Index(string searchInp)
         {
-            var Employees = _EmployeeRepository.GetAll();
-            return View(Employees);
+            if (string.IsNullOrEmpty(searchInp))
+            {
+                var Employees = _EmployeeRepository.GetAll();
+                var MappedEmp = _mapper.Map<IEnumerable<Employee> , IEnumerable<EmployeeViewModel> > (Employees);
+
+                return View(MappedEmp);
+            }
+            else
+            {
+              
+                var Employees = _EmployeeRepository.GetEmployeeByName(searchInp.ToLower());
+                var MappedEmp = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(Employees);
+                return View(MappedEmp);
+            }
+          
         }
         [HttpGet]
         public IActionResult Create()
         {
+            //ViewBag.Department = _departmentRepository.GetAll();    
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Employee Employee)
+        public IActionResult Create(EmployeeViewModel EmployeeView)
         {
             if (ModelState.IsValid)
             {
-                var Count = _EmployeeRepository.Add(Employee);
+                //var MappedEmployee = new Employee()
+                //{
+                //    Name = EmployeeView.Name,
+                //    Age = EmployeeView.Age,
+                //    Address = EmployeeView.Address,
+                //    Salary = EmployeeView.Salary,
+                //    Email = EmployeeView.Email,
+                //    PhoneNumber = EmployeeView.PhoneNumber,
+                //    IsDeleted = EmployeeView.IsDeleted,
+                //    ISActive = EmployeeView.ISActive,
+                //};
+                var MappedEmp = _mapper.Map<EmployeeViewModel ,Employee>(EmployeeView);
+                var Count = _EmployeeRepository.Add(MappedEmp);
 
                 if (Count > 0)
                 {
@@ -49,7 +83,7 @@ namespace FinalProject.PL.Controllers
 
 
             }
-            return View(Employee);
+            return View(EmployeeView);
         }
 
         [HttpGet]
@@ -62,6 +96,7 @@ namespace FinalProject.PL.Controllers
             }
 
             var Employee = _EmployeeRepository.GetById(id.Value);
+           // ViewBag.Department = _departmentRepository.GetAll();
             if (Employee == null)
             {
 
@@ -95,19 +130,19 @@ namespace FinalProject.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Employee Employee)
+        public IActionResult Edit([FromRoute] int id, EmployeeViewModel EmployeeView)
         {
-            if (id != Employee.Id)
+            if (id != EmployeeView.Id)
                 return BadRequest();
 
             if (!ModelState.IsValid)
-                return View(Employee);
+                return View(EmployeeView);
 
 
             try
             {
-
-                _EmployeeRepository.Update(Employee);
+                var MappedEmp = _mapper.Map<EmployeeViewModel, Employee>(EmployeeView);
+                _EmployeeRepository.Update(MappedEmp);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -122,7 +157,7 @@ namespace FinalProject.PL.Controllers
                     ModelState.AddModelError(string.Empty, "An Error occured during update Employee");
                 }
 
-                return View(Employee);
+                return View(EmployeeView);
 
 
             }
@@ -137,12 +172,13 @@ namespace FinalProject.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(Employee Employee)
+        public IActionResult Delete(EmployeeViewModel EmployeeView)
         {
 
             try
             {
-                _EmployeeRepository.Delete(Employee);
+                var MappedEmp = _mapper.Map<EmployeeViewModel, Employee>(EmployeeView);
+                _EmployeeRepository.Delete(MappedEmp);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -157,7 +193,7 @@ namespace FinalProject.PL.Controllers
                     ModelState.AddModelError(string.Empty, "An Error occured during update Employee");
                 }
 
-                return View(Employee);
+                return View(EmployeeView);
             }
 
 
