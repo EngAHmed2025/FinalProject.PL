@@ -54,5 +54,7 @@ namespace FinalProject.DAL.Models
         public Department Department { get; set; }
 
         public int? DepartmentId { get; set; }
+
+        public string ImageName { get; set; }
     }
 }

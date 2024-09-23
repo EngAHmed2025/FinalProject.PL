@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FinalProject.BLL.Interfacies;
 using FinalProject.DAL.Models;
+using FinalProject.PL.Helpers;
 using FinalProject.PL.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -72,6 +73,7 @@ namespace FinalProject.PL.Controllers
                 //    IsDeleted = EmployeeView.IsDeleted,
                 //    ISActive = EmployeeView.ISActive,
                 //};
+                 EmployeeView.ImageName = DocumentSettings.UploadFile(EmployeeView.Image, "Images");
                 var MappedEmp = _mapper.Map<EmployeeViewModel ,Employee>(EmployeeView);
                 var Count = _EmployeeRepository.Add(MappedEmp);
 
@@ -141,6 +143,7 @@ namespace FinalProject.PL.Controllers
 
             try
             {
+                EmployeeView.ImageName = DocumentSettings.UploadFile(EmployeeView.Image,"Images");
                 var MappedEmp = _mapper.Map<EmployeeViewModel, Employee>(EmployeeView);
                 _EmployeeRepository.Update(MappedEmp);
                 return RedirectToAction(nameof(Index));
@@ -179,6 +182,7 @@ namespace FinalProject.PL.Controllers
             {
                 var MappedEmp = _mapper.Map<EmployeeViewModel, Employee>(EmployeeView);
                 _EmployeeRepository.Delete(MappedEmp);
+                DocumentSettings.DeleteFile(EmployeeView.ImageName,"Images");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

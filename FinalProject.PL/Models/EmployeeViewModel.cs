@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System;
 using System.Runtime.Serialization;
+using Microsoft.AspNetCore.Http;
 
 namespace FinalProject.PL.Models
 {
@@ -23,10 +24,11 @@ namespace FinalProject.PL.Models
     public class EmployeeViewModel
     {
 
+      
+        public int Id { get; set; }
         [Required(ErrorMessage = "Name Is Required!")]
         [MaxLength(50, ErrorMessage = "Max Length For Name is 50")]
         [MinLength(4, ErrorMessage = "Min Length For Name is 4")]
-        public int Id { get; set; }
         public string Name { get; set; }
         [Range(21, 60)]
         public int? Age { get; set; }
@@ -53,5 +55,9 @@ namespace FinalProject.PL.Models
         public Department Department { get; set; }
 
         public int? DepartmentId { get; set; }
+
+        public IFormFile Image { get; set; }
+
+        public string ImageName { get; set; }
     }
 }
